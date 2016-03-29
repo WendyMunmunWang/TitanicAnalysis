@@ -3,12 +3,19 @@ View(titanic)
 ##correlation
 correlation = cor(titanic)
 print(correlation)
+
+
 ##plotting
 install.packages("ggplot2", dependencies = TRUE)
 library(ggplot2)
-ggplot(titanic, aes(x=titanic$Age, y=titanic$Survived)) + geom_point()+stat_smooth(method="glm", family="binomial", se=FALSE)
-plot(titanic$Age, titanic$Survived)
-curve(predict(fit_Survival_Age, data.frame(titanic$Age=x), type="response"), add=TRUE)
+ggplot(titanic, aes(x=titanic$Age, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+ggplot(titanic, aes(x=titanic$Parch, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+ggplot(titanic, aes(x=titanic$Fare, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+ggplot(titanic, aes(x=titanic$Sibsp, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+ggplot(titanic, aes(x=titanic$Pclass, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+ggplot(titanic, aes(x=titanic$Sex, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
+
+
 ##fitting 1 explanatory variable
 fit_Survival_Age=glm(titanic$Survived~titanic$Age, family="binomial", data=titanic)
 summSurvival_Age=summary(fit_Survival_Age)
