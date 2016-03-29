@@ -160,5 +160,7 @@ deviancevec=c(summSurvival_Age$deviance,summSuvival_Sex$deviance,summSurvival_Si
               summSurvival_AgeSexParchSibspPclass$deviance, summSurvival_AgeSexParchSibspFare$deviance, 
               summSurvival_AgeSexParchSibspPclassFare$deviance)
 
-
 print(cbind(subsetvec, deviancevec, aicvec))
+
+##best model summary
+summSurvival_AgeSexSibSpPclass
