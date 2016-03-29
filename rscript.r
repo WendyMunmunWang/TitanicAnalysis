@@ -1,4 +1,5 @@
-titanic <- read.delim("~/Documents/STAT306/TitanicAnalysis/cleaned_data.txt")
+#data file path, comment out /add yours!
+titanic <- read.delim("~/Documents/STAT306/TitanicAnalysis/cleaned_data.txt") #wendy
 View(titanic)
 ##correlation
 correlation = cor(titanic)
