@@ -55,7 +55,7 @@ hist(titanic$logFare)
 
 ##plotting
 #install.packages("ggplot2", dependencies = TRUE)
-#library(ggplot2)
+library(ggplot2)
 ggplot(titanic, aes(x=titanic$Age, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$Parch, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$logFare, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
@@ -85,6 +85,11 @@ summcor=cor(Survival,train[,c(3:7,16)])
 print(summcor)
 detach(train)
 
+## Variable selection using stepAIC method 
+library(MASS)
+stepAIC(fit_Survival_AgeSexParchSibSpPclasslogFare, direction = "both",trace = 1)
+
+## We tried variable selection manually too, and ended up selecting same models
 ##fitting 1 explanatory variable
 fit_Survival_Age=glm(train$Survived~train$Age, family="binomial", data=titanic)
 summSurvival_Age=summary(fit_Survival_Age)
@@ -324,21 +329,26 @@ aicvec=c(summSurvival_Age$aic,summSurvival_Sex$aic,summSurvival_SibSp$aic,summSu
          summSurvival_AgeSexParchSibSpPclasslogFare$aic)
 
 DevAicData=cbind(subsetvec, deviancevec, aicvec)
-print(DevAicData)
-View(DevAicData)
 
-#summary of best 3 models based on deviance
+# summary of best 3 models based on stepAIC method
+summSurvival_AgeSexSibSpPclass
+summSurvival_AgeSexParchSibSpPclass
+summSurvival_AgeSexParchSibSpPclasslogFare
+
+# summary of best 3 models based on deviance
 summSurvival_AgeSexParchSibSpPclasslogFare
 summSurvival_AgeSexParchSibSpPclass
 summSurvival_AgeSexSibSpPclasslogFare
 
-#summary of best 3 models based on AIC
+# summary of best 3 models based on AIC
 summSurvival_AgeSexSibSpPclass
 summSurvival_AgeSexParchSibSpPclass
 summSurvival_AgeSexSibSpPclasslogFare
 
-#compare fit_Survival_AgeSexSibSpPclass, fit_Survival_AgeSexParchSibSpPclasslogFare for misclassification rates
-#in-sample misclassification
+# compare fit_Survival_AgeSexSibSpPclass, fit_Survival_AgeSexParchSibSpPclass, 
+# fit_Survival_AgeSexSibSpPclasslogFare, fit_Survival_AgeSexParchSibSpPclasslogFare 
+# for misclassification rates
+# in-sample misclassification
 pred4=predict(fit_Survival_AgeSexSibSpPclass,type="response")
 pred5_1=predict(fit_Survival_AgeSexParchSibSpPclass,type="response")
 pred5_2=predict(fit_Survival_AgeSexSibSpPclasslogFare,type="response")
