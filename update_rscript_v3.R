@@ -54,15 +54,15 @@ hist(titanic$logFare)
 #symmetric, so the log-transformed data will be used
 
 ##plotting
-install.packages("ggplot2", dependencies = TRUE)
-library(ggplot2)
+#install.packages("ggplot2", dependencies = TRUE)
+#library(ggplot2)
 ggplot(titanic, aes(x=titanic$Age, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$Parch, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$logFare, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$SibSp, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$Pclass, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
 ggplot(titanic, aes(x=titanic$Sex, y=titanic$Survived)) + geom_point() + geom_smooth(method="glm", method.args = list(family="binomial"), se=FALSE)
-## added bar graph for categorical variables
+## bar graph for categorical variables
 ggplot(titanic, aes(x=titanic$Pclass, y=titanic$Survived)) + geom_bar(stat="identity")
 ggplot(titanic, aes(x=titanic$Sex, y=titanic$Survived)) + geom_bar(stat="identity")
 
@@ -76,7 +76,8 @@ View(train)
 View(hold)
 
 names(train)
-sum(train$Survival); mean(train$Survival)
+sum(train$Survival)
+mean(train$Survival)
 
 #correlation
 attach(train)
@@ -326,22 +327,32 @@ DevAicData=cbind(subsetvec, deviancevec, aicvec)
 print(DevAicData)
 View(DevAicData)
 
-##best model summary based on deviance
+#summary of best 3 models based on deviance
 summSurvival_AgeSexParchSibSpPclasslogFare
+summSurvival_AgeSexParchSibSpPclass
+summSurvival_AgeSexSibSpPclasslogFare
 
-#best model summary based on AIC
+#summary of best 3 models based on AIC
 summSurvival_AgeSexSibSpPclass
+summSurvival_AgeSexParchSibSpPclass
+summSurvival_AgeSexSibSpPclasslogFare
 
 #compare fit_Survival_AgeSexSibSpPclass, fit_Survival_AgeSexParchSibSpPclasslogFare for misclassification rates
 #in-sample misclassification
 pred4=predict(fit_Survival_AgeSexSibSpPclass,type="response")
+pred5_1=predict(fit_Survival_AgeSexParchSibSpPclass,type="response")
+pred5_2=predict(fit_Survival_AgeSexSibSpPclasslogFare,type="response")
 pred6=predict(fit_Survival_AgeSexParchSibSpPclasslogFare,type="response")
 
 #compare mean of predictions vs mean of actual training data
-print(summary(pred4));
+print(summary(pred4))
+print(summary(pred5_1))
+print(summary(pred5_2))
 print(summary(pred6))
 
 #boundary of 0.5 0.3 0.1 for misclassification
+length(train)
+length(pred4)
 tab4a=table(train$Survival,pred4>0.5)
 tab4b=table(train$Survival,pred4>0.3)
 tab4c=table(train$Survival,pred4>0.1)
