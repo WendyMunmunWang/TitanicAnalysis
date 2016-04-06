@@ -1,12 +1,16 @@
 #data file path, comment out /add yours!
-titanic <- read.delim("~/Desktop/STAT306/TitanicAnalysis/cleaned_data.txt") 
-#titanic <- read.delim("C:/Users/Jennifer She/Downloads/TitanicAnalysis-master(1)/TitanicAnalysis-master/cleaned_data.txt")
-#titanic <- read.delim("~/Documents/STAT306/TitanicAnalysis/cleaned_data.txt") #wendy
+#titanic_na <- read.delim("~/Desktop/STAT306/TitanicAnalysis/cleaned_data.txt") 
+#titanic_na <- read.delim("C:/Users/Jennifer She/Downloads/TitanicAnalysis-master(1)/TitanicAnalysis-master/cleaned_data.txt")
+#titanic_na <- read.delim("~/Documents/STAT306/TitanicAnalysis/cleaned_data.txt") #wendy
+
+# remove rows where Age is NA
+titanic=na.omit(titanic_na)
 View(titanic)
 
 ntot=nrow(titanic)
 names(train)
-sum(titanic$Survived); mean(titanic$Survived)
+sum(titanic$Survived)
+mean(titanic$Survived)
 
 #categorical data
 table(titanic$Survived) #response variable
@@ -69,19 +73,19 @@ ggplot(titanic, aes(x=titanic$Sex, y=titanic$Survived)) + geom_bar(stat="identit
 set.seed(12345)
 # 3000 for training set, 1521 for holdout
 iperm=sample(ntot,ntot) # random permutation of 1...ntot
-n=445
+n=357 #445
 train=titanic[iperm[1:n],]
 hold=titanic[iperm[(n+1):ntot],]
 View(train)
 View(hold)
 
 names(train)
-sum(train$Survival)
-mean(train$Survival)
+sum(train$Survived)
+mean(train$Survived)
 
 #correlation
 attach(train)
-summcor=cor(Survival,train[,c(3:7,16)])
+summcor=cor(Survived,train[,c(3:7,16)])
 print(summcor)
 detach(train)
 
@@ -91,167 +95,167 @@ stepAIC(fit_Survival_AgeSexParchSibSpPclasslogFare, direction = "both",trace = 1
 
 ## We tried variable selection manually too, and ended up selecting same models
 ##fitting 1 explanatory variable
-fit_Survival_Age=glm(train$Survived~train$Age, family="binomial", data=titanic)
+fit_Survival_Age=glm(train$Survived~train$Age, family="binomial", data=train)
 summSurvival_Age=summary(fit_Survival_Age)
-fit_Survival_Sex=glm(train$Survived~factor(train$Sex), family="binomial", data=titanic)
+fit_Survival_Sex=glm(train$Survived~factor(train$Sex), family="binomial", data=train)
 summSurvival_Sex=summary(fit_Survival_Sex)
-fit_Survival_SibSp=glm(train$Survived~train$SibSp, family="binomial", data=titanic)
+fit_Survival_SibSp=glm(train$Survived~train$SibSp, family="binomial", data=train)
 summSurvival_SibSp=summary(fit_Survival_SibSp)
-fit_Survival_Parch=glm(train$Survived~train$Parch, family="binomial", data=titanic)
+fit_Survival_Parch=glm(train$Survived~train$Parch, family="binomial", data=train)
 summSurvival_Parch=summary(fit_Survival_Parch)
-fit_Survival_logFare=glm(train$Survived~train$logFare, family="binomial", data=titanic)
+fit_Survival_logFare=glm(train$Survived~train$logFare, family="binomial", data=train)
 summSurvival_logFare=summary(fit_Survival_logFare)
-fit_Survival_Pclass=glm(train$Survived~factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_Pclass=glm(train$Survived~factor(train$Pclass), family="binomial", data=train)
 summSurvival_Pclass=summary(fit_Survival_Pclass)
 ##fitting 2 explanatory variables
-fit_Survival_AgeSex=glm(train$Survived~train$Age+factor(train$Sex), family="binomial", data=titanic)
+fit_Survival_AgeSex=glm(train$Survived~train$Age+factor(train$Sex), family="binomial", data=train)
 summSurvival_AgeSex=summary(fit_Survival_AgeSex)
-fit_Survival_AgeSibSp=glm(train$Survived~train$Age+train$SibSp, family="binomial", data=titanic)
+fit_Survival_AgeSibSp=glm(train$Survived~train$Age+train$SibSp, family="binomial", data=train)
 summSurvival_AgeSipSp=summary(fit_Survival_AgeSibSp)
-fit_Survival_AgePclass=glm(train$Survived~train$Age+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgePclass=glm(train$Survived~train$Age+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgePclass=summary(fit_Survival_AgePclass)
-fit_Survival_AgeParch=glm(train$Survived~train$Age+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeParch=glm(train$Survived~train$Age+train$Parch, family="binomial", data=train)
 summSurvival_AgeParch=summary(fit_Survival_AgeParch)
-fit_Survival_AgelogFare=glm(train$Survived~train$Age+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgelogFare=glm(train$Survived~train$Age+train$logFare, family="binomial", data=train)
 summSurvival_AgelogFare=summary(fit_Survival_AgelogFare)
 
-fit_Survival_SexPclass=glm(train$Survived~factor(train$Pclass)+factor(train$Sex), family="binomial", data=titanic)
+fit_Survival_SexPclass=glm(train$Survived~factor(train$Pclass)+factor(train$Sex), family="binomial", data=train)
 summSurvival_SexPclass=summary(fit_Survival_SexPclass)
-fit_Survival_SexSibSp=glm(train$Survived~factor(train$Sex)+train$SibSp, family="binomial", data=titanic)
+fit_Survival_SexSibSp=glm(train$Survived~factor(train$Sex)+train$SibSp, family="binomial", data=train)
 summSurvival_SexSipSp=summary(fit_Survival_SexSibSp)
-fit_Survival_SexParch=glm(train$Survived~factor(train$Sex)+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexParch=glm(train$Survived~factor(train$Sex)+train$Parch, family="binomial", data=train)
 summSurvival_SexParch=summary(fit_Survival_SexParch)
-fit_Survival_SexlogFare=glm(train$Survived~factor(train$Sex)+train$logFare, family="binomial", data=titanic)
+fit_Survival_SexlogFare=glm(train$Survived~factor(train$Sex)+train$logFare, family="binomial", data=train)
 summSurvival_SexlogFare=summary(fit_Survival_SexParch)
 
-fit_Survival_PclassSibSp=glm(train$Survived~factor(train$Pclass)+train$SibSp, family="binomial", data=titanic)
+fit_Survival_PclassSibSp=glm(train$Survived~factor(train$Pclass)+train$SibSp, family="binomial", data=train)
 summSurvival_PclassSibSp=summary(fit_Survival_PclassSibSp)
-fit_Survival_PclassParch=glm(train$Survived~factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_PclassParch=glm(train$Survived~factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_PclassParch=summary(fit_Survival_PclassParch)
-fit_Survival_PclasslogFare=glm(train$Survived~factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_PclasslogFare=glm(train$Survived~factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_PclasslogFare=summary(fit_Survival_PclasslogFare)
 
-fit_Survival_SibSplogFare=glm(train$Survived~train$logFare+train$SibSp, family="binomial", data=titanic)
+fit_Survival_SibSplogFare=glm(train$Survived~train$logFare+train$SibSp, family="binomial", data=train)
 summSurvival_SibSplogFare=summary(fit_Survival_SibSplogFare)
-fit_Survival_SibSpParch=glm(train$Survived~train$SibSp+train$Parch, family="binomial", data=titanic)
+fit_Survival_SibSpParch=glm(train$Survived~train$SibSp+train$Parch, family="binomial", data=train)
 summSurvival_SibSpParch=summary(fit_Survival_SibSpParch)
 
-fit_Survival_logFareParch=glm(train$Survived~train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_logFareParch=glm(train$Survived~train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_logFareParch=summary(fit_Survival_logFareParch)
 
 ##fitting 3 explanatory variables
-fit_Survival_AgeSexSibSp=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp, family="binomial", data=titanic)
+fit_Survival_AgeSexSibSp=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp, family="binomial", data=train)
 summSurvival_AgeSexSibSp=summary(fit_Survival_AgeSexSibSp)
-fit_Survival_AgeSexlogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexlogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexlogFare=summary(fit_Survival_AgeSexlogFare)
-fit_Survival_AgeSexParch=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSexParch=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch, family="binomial", data=train)
 summSurvival_AgeSexParch=summary(fit_Survival_AgeSexParch)
-fit_Survival_AgeSexPclass=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgeSexPclass=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgeSexPclass=summary(fit_Survival_AgeSexPclass)
 
-fit_Survival_AgeSibSpPclass=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgeSibSpPclass=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgeSibSpPclass=summary(fit_Survival_AgeSibSpPclass)
-fit_Survival_AgeSibSplogFare=glm(train$Survived~train$Age+train$SibSp+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSibSplogFare=glm(train$Survived~train$Age+train$SibSp+train$logFare, family="binomial", data=train)
 summSurvival_AgeSibSplogFare=summary(fit_Survival_AgeSibSplogFare)
-fit_Survival_AgeSibSpParch=glm(train$Survived~train$Age+train$SibSp+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSibSpParch=glm(train$Survived~train$Age+train$SibSp+train$Parch, family="binomial", data=train)
 summSurvival_AgeSibSpParch=summary(fit_Survival_AgeSibSpParch)
 
-fit_Survival_AgePclasslogFare=glm(train$Survived~train$Age+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgePclasslogFare=glm(train$Survived~train$Age+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgePclasslogFare=summary(fit_Survival_AgePclasslogFare)
-fit_Survival_AgePclassParch=glm(train$Survived~train$Age+factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgePclassParch=glm(train$Survived~train$Age+factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_AgePclassParch=summary(fit_Survival_AgePclassParch)
 
-fit_Survival_AgelogFareParch=glm(train$Survived~train$Age+train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgelogFareParch=glm(train$Survived~train$Age+train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_AgelogFareParch=summary(fit_Survival_AgelogFareParch)
 
-fit_Survival_SexSibSplogFare=glm(train$Survived~train$logFare+factor(train$Sex)+train$SibSp, family="binomial", data=titanic)
+fit_Survival_SexSibSplogFare=glm(train$Survived~train$logFare+factor(train$Sex)+train$SibSp, family="binomial", data=train)
 summSurvival_SexSibSplogFare=summary(fit_Survival_SexSibSplogFare)
-fit_Survival_SexSibSpParch=glm(train$Survived~train$SibSp+factor(train$Sex)+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexSibSpParch=glm(train$Survived~train$SibSp+factor(train$Sex)+train$Parch, family="binomial", data=train)
 summSurvival_SexSibSpParch=summary(fit_Survival_SexSibSpParch)
-fit_Survival_SexSibSpPclass=glm(train$Survived~train$SibSp+factor(train$Sex)+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_SexSibSpPclass=glm(train$Survived~train$SibSp+factor(train$Sex)+factor(train$Pclass), family="binomial", data=train)
 summSurvival_SexSibSpPclass=summary(fit_Survival_SexSibSpPclass)
 
-fit_Survival_SexPclasslogFare=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_SexPclasslogFare=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_SexPclasslogFare=summary(fit_Survival_SexPclasslogFare)
-fit_Survival_SexPclassParch=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexPclassParch=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_SexPclassParch=summary(fit_Survival_SexPclassParch)
 
-fit_Survival_SexlogFareParch=glm(train$Survived~factor(train$Sex)+train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexlogFareParch=glm(train$Survived~factor(train$Sex)+train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_SexlogFareParch=summary(fit_Survival_SexlogFareParch)
 
-fit_Survival_ParchlogFareSibSp=glm(train$Survived~train$Parch+train$SibSp+train$logFare, family="binomial", data=titanic)
+fit_Survival_ParchlogFareSibSp=glm(train$Survived~train$Parch+train$SibSp+train$logFare, family="binomial", data=train)
 summSurvival_ParchlogFareSibSp=summary(fit_Survival_ParchlogFareSibSp)
-fit_Survival_ParchlogFarePclass=glm(train$Survived~train$logFare+factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_ParchlogFarePclass=glm(train$Survived~train$logFare+factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_ParchlogFarePclass=summary(fit_Survival_ParchlogFarePclass)
 
-fit_Survival_ParchPclassSibSp=glm(train$Survived~train$Parch+factor(train$Pclass)+train$SibSp, family="binomial", data=titanic)
+fit_Survival_ParchPclassSibSp=glm(train$Survived~train$Parch+factor(train$Pclass)+train$SibSp, family="binomial", data=train)
 summSurvival_ParchPclassSibSp=summary(fit_Survival_ParchPclassSibSp)
 
-fit_Survival_logFareSibSpPclass=glm(train$Survived~train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_logFareSibSpPclass=glm(train$Survived~train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=train)
 summSurvival_logFareSibSpPclass=summary(fit_Survival_logFareSibSpPclass)
 
 ##fitting 4 explanatory variables 
-fit_Survival_AgeSexSibSpParch=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSexSibSpParch=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+train$Parch, family="binomial", data=train)
 summSurvival_AgeSexSibSpParch=summary(fit_Survival_AgeSexSibSpParch)
-fit_Survival_AgeSexSibSplogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexSibSplogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexSibSplogFare=summary(fit_Survival_AgeSexSibSplogFare)
-fit_Survival_AgeSexSibSpPclass=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgeSexSibSpPclass=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgeSexSibSpPclass=summary(fit_Survival_AgeSexSibSpPclass)
 
-fit_Survival_AgeSexPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexPclasslogFare=summary(fit_Survival_AgeSexPclasslogFare)
-fit_Survival_AgeSexPclassParch=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSexPclassParch=glm(train$Survived~train$Age+factor(train$Sex)+factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_AgeSexPclassParch=summary(fit_Survival_AgeSexPclassParch)
 
-fit_Survival_AgeSexlogFareParch=glm(train$Survived~train$Age+factor(train$Sex)+train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSexlogFareParch=glm(train$Survived~train$Age+factor(train$Sex)+train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_AgeSexlogFareParch=summary(fit_Survival_AgeSexlogFareParch)
 
-fit_Survival_AgeSibSpPclasslogFare=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSibSpPclasslogFare=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgeSibSpPclasslogFare=summary(fit_Survival_AgeSibSpPclasslogFare)
-fit_Survival_AgeSibSpPclassParch=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass)+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSibSpPclassParch=glm(train$Survived~train$Age+train$SibSp+factor(train$Pclass)+train$Parch, family="binomial", data=train)
 summSurvival_AgeSibSpPclassParch=summary(fit_Survival_AgeSibSpPclassParch)
 
-fit_Survival_AgeSibSplogFareParch=glm(train$Survived~train$Age+train$SibSp+train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgeSibSplogFareParch=glm(train$Survived~train$Age+train$SibSp+train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_AgeSibSplogFareParch=summary(fit_Survival_AgeSibSplogFareParch)
 
-fit_Survival_AgePclasslogFareParch=glm(train$Survived~train$Age+factor(train$Pclass)+train$logFare+train$Parch, family="binomial", data=titanic)
+fit_Survival_AgePclasslogFareParch=glm(train$Survived~train$Age+factor(train$Pclass)+train$logFare+train$Parch, family="binomial", data=train)
 summSurvival_AgePclasslogFareParch=summary(fit_Survival_AgePclasslogFareParch)
 
-fit_Survival_SexlogFarePclassSibSp=glm(train$Survived~train$SibSp+factor(train$Sex)+train$logFare+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_SexlogFarePclassSibSp=glm(train$Survived~train$SibSp+factor(train$Sex)+train$logFare+factor(train$Pclass), family="binomial", data=train)
 summSurvival_SexlogFarePclassSibSp=summary(fit_Survival_SexlogFarePclassSibSp)
-fit_Survival_SexlogFarePclassParch=glm(train$Survived~train$Parch+factor(train$Sex)+train$logFare+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_SexlogFarePclassParch=glm(train$Survived~train$Parch+factor(train$Sex)+train$logFare+factor(train$Pclass), family="binomial", data=train)
 summSurvival_SexlogFarePclassParch=summary(fit_Survival_SexlogFarePclassParch)
 
-fit_Survival_SexlogFareSibspParch=glm(train$Survived~factor(train$Sex)+train$logFare+train$SibSp+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexlogFareSibspParch=glm(train$Survived~factor(train$Sex)+train$logFare+train$SibSp+train$Parch, family="binomial", data=train)
 summSurvival_SexlogFareSibspParch=summary(fit_Survival_SexlogFareSibspParch)
 
-fit_Survival_SexPclassSibspParch=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$SibSp+train$Parch, family="binomial", data=titanic)
+fit_Survival_SexPclassSibspParch=glm(train$Survived~factor(train$Sex)+factor(train$Pclass)+train$SibSp+train$Parch, family="binomial", data=train)
 summSurvival_SexPclassSibspParch=summary(fit_Survival_SexPclassSibspParch)
 
-fit_Survival_logFarePclassSibSpParch=glm(train$Survived~train$Parch+train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_logFarePclassSibSpParch=glm(train$Survived~train$Parch+train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=train)
 summSurvival_logFarePclassSibSpParch=summary(fit_Survival_logFarePclassSibSpParch)
 
 ##fitting 5 explanatory variables
-fit_Survival_AgeSexParchSibSpPclass=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgeSexParchSibSpPclass=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgeSexParchSibSpPclass=summary(fit_Survival_AgeSexParchSibSpPclass)
 
-fit_Survival_AgeSexParchSibSplogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexParchSibSplogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexParchSibSplogFare=summary(fit_Survival_AgeSexParchSibSplogFare)
 
-fit_Survival_AgeSexSibSpPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexSibSpPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexSibSpPclasslogFare=summary(fit_Survival_AgeSexSibSpPclasslogFare)
 
-fit_Survival_AgeSexParchPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeSexParchPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgeSexParchPclasslogFare=summary(fit_Survival_AgeSexParchPclasslogFare)
 
-fit_Survival_AgeParchSibSpPclasslogFare=glm(train$Survived~train$Age+train$Parch+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_AgeParchSibSpPclasslogFare=glm(train$Survived~train$Age+train$Parch+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_AgeParchSibSpPclasslogFare=summary(fit_Survival_AgeParchSibSpPclasslogFare)
 
-fit_Survival_SexParchSibSpPclasslogFare=glm(train$Survived~factor(train$Sex)+train$Parch+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=titanic)
+fit_Survival_SexParchSibSpPclasslogFare=glm(train$Survived~factor(train$Sex)+train$Parch+train$SibSp+factor(train$Pclass)+train$logFare, family="binomial", data=train)
 summSurvival_SexParchSibSpPclasslogFare=summary(fit_Survival_SexParchSibSpPclasslogFare)
 
 ##fitting 6 explanatory variables
-fit_Survival_AgeSexParchSibSpPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=titanic)
+fit_Survival_AgeSexParchSibSpPclasslogFare=glm(train$Survived~train$Age+factor(train$Sex)+train$Parch+train$SibSp+train$logFare+factor(train$Pclass), family="binomial", data=train)
 summSurvival_AgeSexParchSibSpPclasslogFare=summary(fit_Survival_AgeSexParchSibSpPclasslogFare)
 
 ##model evaluation
@@ -349,9 +353,9 @@ summSurvival_AgeSexSibSpPclasslogFare
 # fit_Survival_AgeSexSibSpPclasslogFare, fit_Survival_AgeSexParchSibSpPclasslogFare 
 # for misclassification rates
 # in-sample misclassification
-pred4=predict(fit_Survival_AgeSexSibSpPclass,type="response")
-pred5_1=predict(fit_Survival_AgeSexParchSibSpPclass,type="response")
-pred5_2=predict(fit_Survival_AgeSexSibSpPclasslogFare,type="response")
+pred4=predict(fit_Survival_AgeSexSibSpPclass, type="response")
+pred5_1=predict(fit_Survival_AgeSexParchSibSpPclass, type="response")
+pred5_2=predict(fit_Survival_AgeSexSibSpPclasslogFare, type="response")
 pred6=predict(fit_Survival_AgeSexParchSibSpPclasslogFare,type="response")
 
 #compare mean of predictions vs mean of actual training data
@@ -361,36 +365,78 @@ print(summary(pred5_2))
 print(summary(pred6))
 
 #boundary of 0.5 0.3 0.1 for misclassification
-length(train)
-length(pred4)
-tab4a=table(train$Survival,pred4>0.5)
-tab4b=table(train$Survival,pred4>0.3)
-tab4c=table(train$Survival,pred4>0.1)
-tab6a=table(train$Survival,pred6>0.5)
-tab6b=table(train$Survival,pred6>0.3)
-tab6c=table(train$Survival,pred6>0.1)
+tab4a=table(train$Survived,as.numeric(pred4>0.5))
+tab4b=table(train$Survived,as.numeric(pred4>0.3))
+tab4c=table(train$Survived,as.numeric(pred4>0.1))
+
+tab5_1a=table(hold$Survived,as.numeric(pred5_1>0.5))
+tab5_1b=table(hold$Survived,as.numeric(pred5_1>0.3))
+tab5_1c=table(hold$Survived,as.numeric(pred5_1>0.1))
+
+tab5_2a=table(hold$Survived,as.numeric(pred5_2>0.5))
+tab5_2b=table(hold$Survived,as.numeric(pred5_2>0.3))
+tab5_2c=table(hold$Survived,as.numeric(pred5_2>0.1))
+
+tab6a=table(hold$Survived,as.numeric(pred6>0.5))
+tab6b=table(hold$Survived,as.numeric(pred6>0.3))
+tab6c=table(hold$Survived,as.numeric(pred6>0.1))
 
 #convert to rates
-tab4a/apply(tab4a,1,sum);    tab6a/apply(tab6a,1,sum)       
-tab4b/apply(tab4b,1,sum);    tab6b/apply(tab6b,1,sum)
-tab4c/apply(tab4c,1,sum);    tab6c/apply(tab6c,1,sum)
+tab4a/apply(tab4a,1,sum)  
+tab5_1a/apply(tab5_1a,1,sum)
+tab5_2a/apply(tab5_2a,1,sum)
+tab6a/apply(tab6a,1,sum)
+
+tab4b/apply(tab4b,1,sum)
+tab5_1b/apply(tab5_1b,1,sum)
+tab5_2b/apply(tab5_2b,1,sum)
+tab6b/apply(tab6b,1,sum)
+
+tab4c/apply(tab4c,1,sum)
+tab5_1c/apply(tab5_1c,1,sum)
+tab5_2c/apply(tab5_2c,1,sum)
+tab6c/apply(tab6c,1,sum)
 
 #conclusion based on in-sample misclassifcation
 
 # out-of-sample misclassication
 pred4.hold=predict(fit_Survival_AgeSexSibSpPclass,type="response",newdata=hold)
+pred5_1.hold=predict(fit_Survival_AgeSexParchSibSpPclass, type="response", newdata = hold)
+pred5_2.hold=predict(fit_Survival_AgeSexSibSpPclasslogFare, type="response", newdata = hold)
 pred6.hold=predict(fit_Survival_AgeSexParchSibSpPclasslogFare,type="response",newdata=hold)
-htab4a=table(hold$Survival,pred4.hold>0.5)
-htab4b=table(hold$Survival,pred4.hold>0.3)
-htab4c=table(hold$Survival,pred4.hold>0.1)
-htab6a=table(hold$Survival,pred6.hold>0.5)
-htab6b=table(hold$Survival,pred6.hold>0.3)
-htab6c=table(hold$Survival,pred6.hold>0.1)
+
+htab4a=table(hold$Survived,as.numeric(pred4.hold>0.5))
+htab4b=table(hold$Survived,as.numeric(pred4.hold>0.3))
+htab4c=table(hold$Survived,as.numeric(pred4.hold>0.1))
+
+htab5_1a=table(hold$Survived,as.numeric(pred5_1.hold>0.5))
+htab5_1b=table(hold$Survived,as.numeric(pred5_1.hold>0.3))
+htab5_1c=table(hold$Survived,as.numeric(pred5_1.hold>0.1))
+
+htab5_2a=table(hold$Survived,as.numeric(pred5_2.hold>0.5))
+htab5_2b=table(hold$Survived,as.numeric(pred5_2.hold>0.3))
+htab5_2c=table(hold$Survived,as.numeric(pred5_2.hold>0.1))
+
+htab6a=table(hold$Survived,as.numeric(pred6.hold>0.5))
+htab6b=table(hold$Survived,as.numeric(pred6.hold>0.3))
+htab6c=table(hold$Survived,as.numeric(pred6.hold>0.1))
 
 #convert to rates
-htab4a/apply(htab4a,1,sum);   htab6a/apply(htab6a,1,sum)
-htab4b/apply(htab4b,1,sum);   htab6b/apply(htab6b,1,sum)
-htab4c/apply(htab4c,1,sum);   htab6c/apply(htab6c,1,sum)
+htab4a/apply(htab4a,1,sum)  
+htab5_1a/apply(htab5_1a,1,sum)
+htab5_2a/apply(htab5_2a,1,sum)
+htab6a/apply(htab6a,1,sum)
+
+htab4b/apply(htab4b,1,sum)
+htab5_1b/apply(htab5_1b,1,sum)
+htab5_2b/apply(htab5_2b,1,sum)
+htab6b/apply(htab6b,1,sum)
+
+htab4c/apply(htab4c,1,sum)
+htab5_1c/apply(htab5_1c,1,sum)
+htab5_2c/apply(htab5_2c,1,sum)
+htab6c/apply(htab6c,1,sum)
+
 
 #conclusion based on out-of-sample misclassification
 
@@ -398,13 +444,13 @@ htab4c/apply(htab4c,1,sum);   htab6c/apply(htab6c,1,sum)
 prcateg4=cut(pred4,breaks=c(0,.01,.02,.03,.04,.06,.08,.10,.13,.2,.5,1))
 print(table(prcateg4))
 
-HLsumm4=tapply(train$Survival,prcateg4,mean)
+HLsumm4=tapply(train$Survived,prcateg4,mean)
 print(HLsumm4)
 
 prcateg6=cut(pred6,breaks=c(0,.01,.02,.03,.04,.06,.08,.10,.13,.2,.5,1))
 print(table(prcateg6))
 
-HLsumm9=tapply(train$Survival,prcateg6,mean)
+HLsumm6=tapply(train$Survived,prcateg6,mean)
 print(HLsumm6)
 
 #conclusion based on calibration of fit
