@@ -593,3 +593,4 @@ print(HLsumm5_2_quad)
 #conclusion of quadratic models vs linear models:
 #fit_Survival_AgeSexSibSpPclass_quad has the lowest AIC and least # of out-of-sample misclassifications
 #out of all the models tested, so it is the best model
+#cut-off of 0.40 is the best because it has one of the smallest # of in-sample misclassifications and it is closest to the sample mean
