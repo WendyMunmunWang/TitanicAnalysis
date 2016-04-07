@@ -437,7 +437,6 @@ htab5_1c/apply(htab5_1c,1,sum)
 htab5_2c/apply(htab5_2c,1,sum)
 htab6c/apply(htab6c,1,sum)
 
-
 #conclusion based on out-of-sample misclassification
 
 # Hosmer-Lemeshow calibration check

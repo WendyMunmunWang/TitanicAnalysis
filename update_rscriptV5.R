@@ -1,6 +1,6 @@
 #data file path, comment out /add yours!
-#titanic_na <- read.delim("~/Desktop/STAT306/TitanicAnalysis/cleaned_data.txt") 
-titanic_na <- read.delim("C:/Users/Jennifer She/Downloads/TitanicAnalysis-master(1)/TitanicAnalysis-master/cleaned_data.txt")
+titanic_na <- read.delim("~/Desktop/STAT306/TitanicAnalysis/cleaned_data.txt") 
+#titanic_na <- read.delim("C:/Users/Jennifer She/Downloads/TitanicAnalysis-master(1)/TitanicAnalysis-master/cleaned_data.txt")
 #titanic_na <- read.delim("~/Documents/STAT306/TitanicAnalysis/cleaned_data.txt") #wendy
 
 # remove rows where Age is NA
@@ -63,10 +63,10 @@ hist(titanic$logFare)
 library(ggplot2)
 
 #$ boxplots for continuous/non-categorical variables
-plot(factor(titanic$Survived),titanic$Age)
-plot(factor(titanic$Survived),titanic$Parch)
-plot(factor(titanic$Survived),titanic$SibSp)
-plot(factor(titanic$Survived),titanic$logFare)
+plot(factor(titanic$Survived),titanic$Age, xlab = "Survived or not", ylab = "Age")
+plot(factor(titanic$Survived),titanic$Parch, xlab = "Survived or not", ylab = "Parch")
+plot(factor(titanic$Survived),titanic$SibSp,  xlab = "Survived or not", ylab = "SibSp")
+plot(factor(titanic$Survived),titanic$logFare,  xlab = "Survived or not", ylab = "logFare")
 
 ## tables for categorical variables
 table(factor(titanic$Survived),factor(titanic$Pclass))
